@@ -1,4 +1,6 @@
 Flask==1.0.2
 pandas
 datetime
-toggl
+TogglPy
+google
+google-api-python-client

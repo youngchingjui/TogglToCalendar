@@ -12,6 +12,7 @@
 # below:
 .git
 .gitignore
+lib/numpy/core/.._multiarray_umath.cpython-37m-darwin.so.icloud
 
 # Python pycache:
 __pycache__/
