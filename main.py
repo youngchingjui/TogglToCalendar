@@ -2,6 +2,7 @@ from toggl.TogglPy import Toggl
 import pandas as pd
 import datetime
 from flask import Flask, render_template
+import os
 
 app = Flask(__name__)
 
@@ -24,24 +25,27 @@ def run():
     from google.auth import app_engine
     import googleapiclient.discovery
 
+    # Second method using OAuth 2.0
+    from google.oauth2 import service_account
+
     project = "toggltocalendar"
     SCOPES = ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events']
 
+    credentials = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'], scopes=SCOPES)
+
     # Explicitly use App Engine credentials. These credentials are
     # only available when running on App Engine Standard.
-    credentials = app_engine.Credentials(scopes=SCOPES)
+    # credentials = app_engine.Credentials(scopes=SCOPES)
 
     # Explicitly pass the credentials to the client library.
-    storage_client = googleapiclient.discovery.build('storage', 'v1', credentials=credentials)
+    # storage_client = googleapiclient.discovery.build('storage', 'v1', credentials=credentials)
 
     # Make an authenticated API request
-    buckets = storage_client.buckets().list(project=project).execute()
-    print(buckets)
+    # buckets = storage_client.buckets().list(project=project).execute()
+    # print(buckets)
 
 
     # Connect with Google Calendar to read and create events
-
-
     service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
 
     calendars = service.calendarList().list().execute()
@@ -53,9 +57,9 @@ def run():
 
     toggl.setAPIKey('2e8cb0eb95b4d98c98564e4ba8ee26ee')
 
-    duration = 5 # minutes
+    duration = 1 # day(s)
     until = datetime.datetime.now()
-    since = until - datetime.timedelta(min=duration)
+    since = until - datetime.timedelta(days=duration)
     page = 1
     more_results = True
 
@@ -63,8 +67,8 @@ def run():
     while (more_results):
         data =  {
             'workspace_id': 2705063,
-            'since': since,
-            'until': since.strftime,
+            'since': since.strftime("%Y-%m-%d"),
+            'until': until.strftime("%Y-%m-%d"),
             'page': page
         }
         response = toggl.getDetailedReport(data)

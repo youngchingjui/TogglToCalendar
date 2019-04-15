@@ -1,5 +1,9 @@
 runtime: python37
 
+env_variables:
+  # Address to API credentials key
+  GOOGLE_APPLICATION_CREDENTIALS: "TogglToCalendar-7ae0df04d7fd.json"
+  
 handlers:
   # This configures Google App Engine to serve the files in the app's static
   # directory.
